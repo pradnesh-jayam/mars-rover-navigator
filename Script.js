@@ -1,26 +1,21 @@
 /**
- * Mars Rover Path Explorer - Pathfinding Visualizer v2.0
- * Canvas-based interactive visualizer for BFS, DFS, Dijkstra's, and A* algorithms
+ * Mars Rover Path Explorer - Pathfinding Visualizer
+ * Let's you visualize BFS, DFS, Dijkstra's, and A* on a grid
  * 
- * Features:
- * - Real-time algorithm execution with visual feedback
- * - Mouse-driven wall creation and node repositioning
- * - Performance metrics (distance, time, nodes searched)
- * - Zero external dependencies; pure vanilla JavaScript
- * 
- * Author: Jayam Pradnesh
- * Updated: July 2026
+ * You click to draw walls, drag the start/end nodes around,
+ * then pick an algorithm and watch it find the path
  */
 
-// Math function aliases for cleaner code
+// Math shortcuts
 const floor = Math.floor;
 const abs = Math.abs;
 const round = Math.round;
 
-// Canvas setup - automatically scales to viewport
+// Canvas setup
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
+// Grid dimensions - scales based on screen size
 const nodeSize = 30;
 const columns = round((window.innerWidth - window.innerWidth / 10) / nodeSize);
 const rows = round((window.innerHeight - window.innerHeight / 6) / nodeSize);
@@ -28,12 +23,7 @@ const rows = round((window.innerHeight - window.innerHeight / 6) / nodeSize);
 canvas.width = columns * nodeSize;
 canvas.height = rows * nodeSize;
 
-/**
- * Mouse state tracker
- * - (x, y): Current mouse position in grid coordinates
- * - (dx, dy): Previous position for drag detection
- * - down: Mouse button pressed state
- */
+// Track mouse position and drag state
 const mouse = {
   x: undefined,
   y: undefined,
@@ -42,33 +32,14 @@ const mouse = {
   down: false,
 };
 
-/**
- * Manhattan distance heuristic for A* algorithm
- * Used to estimate remaining distance from nodeA to nodeB
- * @param {Node} nodeA - Starting node
- * @param {Node} nodeB - Target node
- * @returns {number} Manhattan distance = |x1-x2| + |y1-y2|
- */
+// Manhattan distance - used by A* to guess how far a node is from the goal
 function getDistance(nodeA, nodeB) {
   return abs(nodeA.column - nodeB.column) + abs(nodeA.row - nodeB.row);
 }
 
-/**
- * Algorithm Execution Functions
- * Each function follows the pattern:
- * 1. Start performance clock
- * 2. Reset grid state (clear previous search)
- * 3. Execute algorithm
- * 4. Measure execution time
- * 5. Visualize shortest path and metrics
- */
+// Run each algorithm
+// We time it, reset the grid, run the algorithm, then show the results
 
-/**
- * Execute BFS (Breadth-First Search)
- * Queue-based exploration; guarantees shortest path on unweighted grids
- * Time: O(V + E), Space: O(V)
- * @param {Grid} grid - The pathfinding grid
- */
 function drawbfs(grid) {
   var startTime = startClock();
   grid.resetGrid();
@@ -78,12 +49,6 @@ function drawbfs(grid) {
   drawShortestPath(grid, finishTime);
 }
 
-/**
- * Execute DFS (Depth-First Search)
- * Stack-based exploration; memory-efficient, doesn't guarantee shortest path
- * Time: O(V + E), Space: O(V)
- * @param {Grid} grid - The pathfinding grid
- */
 function drawdfs(grid) {
   var startTime = startClock();
   grid.resetGrid();
@@ -93,12 +58,6 @@ function drawdfs(grid) {
   drawShortestPath(grid, finishTime);
 }
 
-/**
- * Execute Dijkstra's Algorithm
- * Weighted pathfinding; optimal for non-negative edge weights
- * Time: O(V²), Space: O(V)
- * @param {Grid} grid - The pathfinding grid
- */
 function drawDijkstra(grid) {
   var startTime = startClock();
   grid.resetGrid();
@@ -108,12 +67,6 @@ function drawDijkstra(grid) {
   drawShortestPath(grid, finishTime);
 }
 
-/**
- * Execute A* Search
- * Heuristic-guided pathfinding using Manhattan distance
- * Time: O(E), Space: O(V) with admissible heuristic
- * @param {Grid} grid - The pathfinding grid
- */
 function drawAStar(grid) {
   var startTime = startClock();
   grid.resetGrid();
@@ -123,24 +76,13 @@ function drawAStar(grid) {
   drawShortestPath(grid, finishTime);
 }
 
-/**
- * Utility Functions for Path Reconstruction
- */
-
-/**
- * Sort unvisited nodes by distance (used in Dijkstra's algorithm)
- * @param {Node[]} unvisitedNodes - Array of nodes to sort
- */
+// Sort nodes by distance (for Dijkstra's)
 function sortNodesByDistance(unvisitedNodes) {
   unvisitedNodes.sort((nodeA, nodeB) => nodeA.distance - nodeB.distance);
 }
 
-/**
- * Reconstruct shortest path from start to finish node
- * Follows previousNode pointers (backtracking) from finish to start
- * @param {Node} finishNode - The end node of the path
- * @returns {Node[]} Array of nodes representing the shortest path
- */
+// Trace back the path from finish to start using previousNode pointers
+// This reconstructs the shortest path the algorithm found
 function getNodesInShortestPathOrder(finishNode) {
   const nodesInShortestPathOrder = [];
   let currentNode = finishNode;
@@ -151,29 +93,17 @@ function getNodesInShortestPathOrder(finishNode) {
   return nodesInShortestPathOrder;
 }
 
-/**
- * Visualize the shortest path and display performance metrics
- * 
- * Process:
- * 1. Reconstruct path using previousNode pointers
- * 2. Draw path in yellow on canvas
- * 3. Count total nodes searched (efficiency metric)
- * 4. Display distance, time, and nodes searched
- * 
- * @param {Grid} grid - The pathfinding grid with results
- * @param {number} finishTime - Algorithm execution time in milliseconds
- */
+// Draw the shortest path and update the metrics panel
 function drawShortestPath(grid, finishTime) {
-  // Reconstruct path by backtracking from finish to start
+  // Get the shortest path
   const nodesInShortestPathOrder = getNodesInShortestPathOrder(
     grid.getFinishNode()
   );
   
-  // Draw shortest path in yellow (skip start and finish nodes)
+  // Draw it in yellow (skip the start and end nodes)
   for (let i = 1; i < nodesInShortestPathOrder.length - 1; i++) {
     node = nodesInShortestPathOrder[i];
-
-    ctx.fillStyle = "#f9d56e"; // Yellow color for path
+    ctx.fillStyle = "#f9d56e";
     ctx.fillRect(
       node.column * nodeSize,
       node.row * nodeSize,
@@ -182,14 +112,14 @@ function drawShortestPath(grid, finishTime) {
     );
   }
 
-  // Display shortest path distance (number of steps)
+  // Show the distance (number of steps)
   document.getElementById("distance").innerHTML =
     nodesInShortestPathOrder.length - 1;
   
-  // Display execution time
+  // Show how fast it ran
   document.getElementById("time").innerHTML = finishTime;
 
-  // Count nodes explored during algorithm execution
+  // Count how many nodes the algorithm explored
   nodesSearched = 0;
   for (let column = 0; column < grid.columns; column++) {
     for (let row = 0; row < grid.rows; row++) {
@@ -198,8 +128,6 @@ function drawShortestPath(grid, finishTime) {
       }
     }
   }
-
-  // Display node count for algorithm efficiency analysis
   document.getElementById("searched").innerHTML = nodesSearched;
 }
 

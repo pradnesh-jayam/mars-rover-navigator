@@ -1,247 +1,188 @@
 # Mars Rover Path Explorer 🚀
 
-A high-performance, interactive canvas-based pathfinding visualizer implementing **BFS, DFS, Dijkstra's Algorithm, and A* Search** with real-time algorithm execution visualization and comprehensive performance metrics.
+A canvas-based pathfinding visualizer where you can watch **BFS, DFS, Dijkstra's, and A*** compete to find the shortest path around obstacles.
 
-## 🎯 Features
+I built this to understand how different search algorithms work - not just reading about them on Wikipedia, but seeing them actually explore a grid in real-time. It's satisfying to watch an algorithm navigate around walls and figure out the best route.
 
-### Core Algorithms
-- **BFS (Breadth-First Search)** - Queue-based exploration; guarantees shortest path on unweighted grids
-- **DFS (Depth-First Search)** - Stack-based exploration; memory-efficient with depth-first traversal
-- **Dijkstra's Algorithm** - Weighted pathfinding; optimal for non-negative edge weights
-- **A* Search** - Heuristic-guided pathfinding using Manhattan distance; optimal and efficient for weighted grids
-
-### Interactive Visualization
-- **Canvas-based real-time rendering** - Dynamic grid visualization with instant algorithm execution
-- **Mouse-driven obstacle creation** - Click and drag across the grid to draw walls
-- **Draggable start/end nodes** - Reposition purple (start) and orange (end) nodes on-the-fly
-- **Live algorithm execution** - Watch nodes get explored and backtracked in real-time
-
-### Performance Metrics
-- **Distance tracking** - Displays shortest path length (Manhattan distance)
-- **Execution time** - Millisecond-precision performance clock measuring algorithm runtime
-- **Nodes searched** - Real-time counter showing explored nodes vs total grid size
-
-### Technical Implementation
-- **Custom Grid/Node classes** - Object-oriented architecture for state management and neighbor tracking
-- **Distance & visited-state tracking** - Efficient node metadata for algorithm correctness
-- **Path reconstruction via backtracking** - Previous-node pointers enable shortest path recovery
-- **Zero external dependencies** - Pure vanilla JavaScript; no jQuery, lodash, or external libraries
-- **Responsive canvas layout** - Automatically scales grid to viewport dimensions
-
-## 🎮 How to Use
+## 🎮 How to Use It
 
 ### Getting Started
-1. Open `index.html` in a modern web browser (Chrome, Firefox, Safari, Edge)
-2. The grid will load with a purple node (start) on the left and orange node (end) on the right
+1. Open `index.html` in your browser
+2. You'll see a grid with a purple node (start) on the left and an orange node (end) on the right
 
-### Drawing Obstacles
-- **Click and drag** anywhere on the white grid area to create black walls
-- **Walls block pathfinding** - algorithms will navigate around them
-- **Toggle walls** - click the same cell again to remove a wall
+### Draw Obstacles
+- **Click and drag** anywhere on the white grid to create black walls
+- The algorithms will navigate around them
+- Click the same cell again to erase a wall
 
-### Positioning Start/End Points
-- **Click and drag the purple node** to set a new start position
-- **Click and drag the orange node** to set a new end position
-- Both nodes can be placed anywhere on the grid, including in the same cell
+### Move Start & End Points
+- **Drag the purple node** to change where the path starts
+- **Drag the orange node** to change where it ends
+- You can place them anywhere, even on top of each other
 
-### Running Algorithms
-1. Click the **ALGORITHMS** dropdown in the navbar
-2. Select your algorithm: BFS, DFS, Dijkstra, or A-Star
-3. The grid will:
-   - Reset previous visualization
-   - Explore nodes (light blue highlights)
-   - Draw the shortest path (yellow highlights)
-   - Display metrics: Distance, Time, Nodes Searched
+### Run an Algorithm
+1. Click **ALGORITHMS** in the menu
+2. Pick one: BFS, DFS, Dijkstra, or A-Star
+3. Watch it explore (light blue), then highlight the shortest path (yellow)
+4. Check the metrics: Distance, Time, and how many nodes it searched
 
-### Reset Grid
-- Click **RESET** button to clear all walls and return to default start/end positions
-- This clears all visualization but retains the grid structure
+### Reset
+Click **RESET** to clear everything and start over.
 
-## 📊 Algorithm Comparison
+## 🧠 What I Learned About Each Algorithm
 
-| Algorithm | Time Complexity | Space Complexity | Optimal? | Finds Shortest? | Notes |
-|-----------|-----------------|------------------|----------|-----------------|-------|
-| **BFS** | O(V + E) | O(V) | ❌ | ✅ (unweighted) | Explores level by level |
-| **DFS** | O(V + E) | O(V) | ❌ | ❌ | Memory-efficient, depth-first |
-| **Dijkstra** | O(V²) | O(V) | ✅ | ✅ (non-negative) | Weighted graphs |
-| **A*** | O(E) | O(V) | ✅ | ✅ (admissible heuristic) | Best for heuristic-guided search |
+### BFS (Breadth-First Search)
+- Explores layer by layer, like ripples in water
+- Guarantees the shortest path (for unweighted grids)
+- Usually searches a lot of nodes
+- **Time: O(V + E), Space: O(V)**
 
-**Heuristic Used**: Manhattan Distance = `|x1 - x2| + |y1 - y2|`
+**Why it matters:** Simple, guaranteed shortest path, but slow compared to smarter algorithms.
 
-## 🏗️ Architecture
+### DFS (Depth-First Search)
+- Dives deep in one direction, then backtracks
+- Doesn't guarantee shortest path
+- Uses less memory than BFS
+- **Time: O(V + E), Space: O(V)**
 
-### File Structure
-```
-mars-rover-navigator/
-├── index.html          # UI layout with navbar and canvas
-├── Script.js           # Main event handlers and algorithm orchestration
-├── grid.js             # Grid class: 2D node array management
-├── Node.js             # Node class: individual cell state and rendering
-├── BFS.js              # Breadth-First Search implementation
-├── DFS.js              # Depth-First Search implementation
-├── Dijkstra.js         # Dijkstra's Algorithm implementation
-├── Astar.js            # A* Search implementation
-├── Clock.js            # Performance timing utilities
-└── style.css           # Responsive styling and theming
+**Why it matters:** Efficient memory-wise, but you might not get the shortest path. Good for exploring mazes.
 
-```
+### Dijkstra's Algorithm
+- Explores the closest unexplored node first
+- Guarantees shortest path (even with weights)
+- More efficient than BFS because it's greedy
+- **Time: O(V²), Space: O(V)**
 
-### Core Classes
+**Why it matters:** Works with weighted graphs, better than BFS when costs vary.
 
-#### `Grid`
-- Manages 2D array of `Node` objects
-- Dimensions: Dynamic based on viewport (30px cells)
-- Methods:
-  - `createGrid()` - Initialize all nodes with start/end positions
-  - `drawGrid()` - Render all nodes to canvas
-  - `updateGrid()` - Handle mouse interactions and node updates
-  - `resetGrid()` - Clear visited/distance state for new search
-  - `getStartNode()`, `getFinishNode()` - Accessor methods
+### A* (A-Star)
+- Like Dijkstra, but smarter - it guesses which direction to go
+- Uses Manhattan Distance to estimate how far each node is from the goal
+- Explores way fewer nodes than the others
+- **Time: O(E), Space: O(V)** (with good heuristic)
 
-#### `Node`
-- Represents a single grid cell
-- Properties:
-  - `column`, `row` - Grid coordinates
-  - `isStart`, `isFinish`, `isWall` - Node type flags
-  - `isVisited` - Exploration state
-  - `distance` - Distance from start (Dijkstra/A*)
-  - `previousNode` - Backpointer for path reconstruction
-  - `neighbours[]` - Adjacent unblocked cells
-- Methods:
-  - `draw()` - Render to canvas with color coding
-  - `getNeighbours()` - Return adjacent valid cells
-  - `populateNeighbours()` - Compute adjacency on first access
-  - `clicked()` - Toggle wall state
+**Why it matters:** This is what GPS and game AI actually use. The heuristic makes it super efficient.
 
-### Algorithm Pattern
-Each algorithm follows this pattern:
-1. **Initialize**: Start node marked as visited, added to queue/stack
-2. **Loop**: Process frontier nodes until finish found or frontier empty
-3. **Neighbor Check**: Skip walls and already-visited nodes
-4. **Mark & Backtrack**: Set `isVisited=true` and `previousNode` pointer
-5. **Return**: Visited nodes list (enables visualization) and shortest path
+## 🏗️ How I Built It
 
-### Performance Clock
-- `startClock()` - Captures `Date.now()` at algorithm start
-- `stopClock(startTime)` - Calculates elapsed milliseconds; formats as "Xms"
-- Precision: Millisecond-level; typical execution 1-50ms on modern browsers
+### The Classes
 
-## 🎨 UI/UX Highlights
+**Grid** - Manages the 2D array of cells
+- Keeps track of all the nodes
+- Handles rendering to canvas
+- Resets state between algorithm runs
 
-### Navbar
-- **Instructions Modal** - Click to review controls (keyboard hints, color legend)
-- **Algorithm Dropdown** - Select from BFS, DFS, Dijkstra, A*
-- **Explanation Links** - Wikipedia articles for each algorithm
-- **Reset Button** - One-click grid reset
+**Node** - Each cell in the grid
+- Knows its position (column, row)
+- Tracks if it's a wall, start, or finish
+- Stores the path back to start (via `previousNode`) so we can reconstruct the solution
+- Knows its neighbors (adjacency list for faster algorithm execution)
 
-### Color Scheme
-- **Purple** - Start node
-- **Orange** - End node (destination)
-- **Black** - Walls/obstacles
-- **Light Blue** - Explored nodes
-- **Yellow** - Shortest path
-- **White** - Unvisited cells with grid lines
+**Clock** - Measures how fast each algorithm runs
+- Captures start time
+- Calculates elapsed milliseconds
+- Shows "15ms" on the display
 
-### Performance Metrics Panel (Top-Right)
-- **Distance** - Number of steps in shortest path
-- **Time** - Algorithm execution time in milliseconds
-- **NodeSearched** - Count of visited nodes (exploration efficiency)
+### The Algorithm Pattern
 
-## 🚀 Performance Optimizations
+Every algorithm follows the same structure:
+1. Start with the start node
+2. Keep a list of nodes to explore (queue for BFS, stack for DFS, priority queue for Dijkstra/A*)
+3. Take nodes off this list one by one
+4. For each node, check its neighbors
+5. Skip walls and already-visited nodes
+6. Mark new nodes as visited and add them to explore
+7. When you hit the finish node, you're done
+8. Use `previousNode` pointers to trace back the path
 
-1. **Lazy neighbor computation** - `getNeighbours()` caches adjacency list on first call
-2. **Early termination** - Algorithm stops as soon as finish node is found
-3. **Canvas batching** - All node rendering done in single `drawGrid()` pass
-4. **Efficient grid indexing** - O(1) node access via 2D array
-5. **Mouse event debouncing** - Canvas coordinate calculation only on mouse events
+The main difference between algorithms is **how you choose which node to explore next**.
 
-## 🔧 Browser Compatibility
+## 🎨 The Visual Design
 
-- **Chrome 90+** - Full support; excellent performance
-- **Firefox 88+** - Full support
-- **Safari 14+** - Full support
-- **Edge 90+** - Full support
-- **Mobile** - Touch-dragging supported on tablets (limited wall creation)
+- **Purple** = Start node
+- **Orange** = Finish node (where we want to go)
+- **Black** = Walls/obstacles
+- **Light Blue** = Nodes the algorithm explored
+- **Yellow** = The shortest path it found
+- **White** = Unvisited cells
 
-## 📱 Responsive Design
+The color scheme makes it easy to see what the algorithm is doing.
 
-- Grid auto-scales to viewport dimensions
-- Canvas width = viewport width - 10% margin
-- Canvas height = viewport height - navbar height (20%)
-- Node size fixed at 30px for consistent interaction
+## 📊 Comparing Algorithms
 
-## 🎓 Learning Outcomes
+On the same grid with the same obstacles:
 
-By studying and using this project, you'll understand:
-- ✅ Graph traversal algorithms (BFS, DFS)
-- ✅ Shortest path algorithms (Dijkstra, A*)
-- ✅ Data structure choices (queues, stacks, priority queues)
-- ✅ Heuristic design and admissibility
-- ✅ Canvas API for real-time visualization
-- ✅ Object-oriented JavaScript design patterns
-- ✅ Event-driven interactive applications
-- ✅ Performance profiling and metrics
+| Algorithm | Explores More? | Speed | Shortest Path? | Best For |
+|-----------|---|---|---|---|
+| **BFS** | Yes (lots) | Slower | Yes ✅ | Learning / unweighted grids |
+| **DFS** | Fewer | Varies | No ❌ | Saving memory |
+| **Dijkstra** | Medium | Fast | Yes ✅ | Weighted graphs |
+| **A*** | Fewest | Fastest | Yes ✅ | Real-world apps (GPS, games) |
 
-## 🛠️ Customization
+Try them all on the same grid - A* usually wins because it "knows" which direction the goal is.
 
-### Change Grid Size
-Modify `nodeSize` in `Script.js`:
+## 💡 Why I Built This
+
+- I wanted to **see** algorithms work, not just read pseudocode
+- Understanding the difference between BFS and A* by watching them - one explores everywhere, one goes straight to the goal
+- It's a good portfolio project because it shows I can:
+  - Implement multiple graph algorithms correctly
+  - Use the canvas API for real-time visualization
+  - Write clean, object-oriented JavaScript
+  - Build something interactive and fun to use
+
+## 🔧 Customization
+
+Want to change something?
+
+**Make the grid bigger/smaller:**
+- Edit `nodeSize` in Script.js (30 = current size)
+- Smaller number = more cells, faster algorithms
+
+**Change colors:**
+- Edit `getColour()` in Node.js
+- Swap any hex color code
+
+**Add diagonal movement:**
+- In Node.js, add these four lines to `populateNeighbours()`:
 ```javascript
-const nodeSize = 30; // Increase for larger cells, decrease for finer grid
-```
-
-### Change Node Colors
-Edit `getColour()` in `Node.js`:
-```javascript
-getColour() {
-    if (this.isStart) return "rgb(133, 101, 208)"; // Custom purple
-    // ... etc
-}
-```
-
-### Add Diagonal Movement
-Modify `populateNeighbours()` in `Node.js` to include diagonals:
-```javascript
-// Add diagonal neighbors
+// Diagonals (if you want them)
 if (this.column > 0 && this.row > 0) {
     this.neighbours.push(this.grid[this.column - 1][this.row - 1]);
 }
+// ... repeat for other corners
 ```
 
-## 📈 Project Metrics
+## 🚀 What I'd Add Next
 
-- **Algorithms Implemented**: 4 (BFS, DFS, Dijkstra, A*)
-- **Lines of Code**: ~600 (pure vanilla JavaScript)
-- **External Dependencies**: 0
-- **Canvas Cells**: Up to 70×50 nodes (3,500 cells)
-- **Average Algorithm Runtime**: 2-15ms
-- **Browser Support**: All modern browsers (ES6+)
+- [ ] Speed controls (slow down animation to see step-by-step)
+- [ ] Different maze templates (maze generator)
+- [ ] Weighted cells (some terrain costs more to cross)
+- [ ] Bidirectional search (start from both ends, meet in middle)
+- [ ] More heuristics (try different A* strategies)
+- [ ] Save/load grids
+- [ ] Keyboard shortcuts for algorithms
+- [ ] Dark mode
 
-## 🤝 Contributing
+## 📈 Quick Stats
 
-To improve this project:
-1. Clone the repository
-2. Create a feature branch
-3. Add enhancements (new algorithms, UI improvements, performance optimizations)
-4. Test thoroughly on multiple browsers
-5. Submit a pull request with clear documentation
+- **Lines of Code**: ~600 (no libraries, just vanilla JS)
+- **Algorithms**: 4 (BFS, DFS, Dijkstra, A*)
+- **Grid Size**: Up to 70×50 cells
+- **Typical Runtime**: 2-15ms per algorithm
+- **Browser Support**: Any modern browser (Chrome, Firefox, Safari, Edge)
 
-## 📝 License
+## 🎓 What This Taught Me
 
-This project is open source and available for educational purposes.
-
-## 🚀 Future Enhancements
-
-- [ ] Weighted grid cells (terrain cost)
-- [ ] Bidirectional search algorithms
-- [ ] JPS (Jump Point Search) for grids
-- [ ] Animation speed controls
-- [ ] Preset maze templates
-- [ ] Algorithm statistics dashboard
-- [ ] Keyboard shortcuts for algorithm selection
-- [ ] Export/import grid layouts
-- [ ] Dark mode theme toggle
+✅ Graph traversal fundamentals  
+✅ How heuristics make algorithms smarter  
+✅ Canvas API and real-time rendering  
+✅ Object-oriented JavaScript design  
+✅ Performance analysis (timing algorithms)  
+✅ Debugging by watching visual output  
 
 ---
 
-**Built with ❤️ by Jayam Pradnesh | Mars Rover Path Explorer v2.0**
+**Built by Jayam Pradnesh**
+
+This was a fun learning project. If you're studying algorithms, run the visualizer and try different obstacles - you'll understand these algorithms way better than reading about them.
