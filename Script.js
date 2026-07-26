@@ -33,6 +33,15 @@ function drawbfs(grid) {
   drawShortestPath(grid, finishTime);
 }
 
+function drawdfs(grid) {
+  var startTime = startClock();
+  grid.resetGrid();
+  grid.drawGrid();
+  dfs(grid);
+  var finishTime = stopClock(startTime);
+  drawShortestPath(grid, finishTime);
+}
+
 function drawDijkstra(grid) {
   var startTime = startClock();
   grid.resetGrid();

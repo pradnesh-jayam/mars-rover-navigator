@@ -85,8 +85,9 @@
                             ALGORITHMS
                         </a>
                         <ul class="dropdown-menu style_nav_buttons" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" onclick="drawbfs(grid);">BFS</a></li>
+                            <li><a class="dropdown-item" onclick="drawdfs(grid);">DFS</a></li>
                             <li><a class="dropdown-item" onclick="drawDijkstra(grid);">Dijkstra</a></li>
-                            <!-- <li><a class="dropdown-item" onclick="drawAStar(grid);">BFS</a></li> -->
                             <li><a class="dropdown-item" onclick="drawAStar(grid);">A-Star</a></li>
                         </ul>
                     </li>
@@ -101,10 +102,12 @@
                     </a>
 
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a class="dropdown-item" href="https://en.wikipedia.org/wiki/Breadth-first_search"
+                                target="_blank">BFS</a></li>
+                        <li><a class="dropdown-item" href="https://en.wikipedia.org/wiki/Depth-first_search"
+                                target="_blank">DFS</a></li>
                         <li><a class="dropdown-item" href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm"
                                 target="_blank">Dijkstra</a></li>
-                        <!-- <li><a class="dropdown-item" href="https://en.wikipedia.org/wiki/Breadth-first_search"
-                                target="_blank">BFS</a></li> -->
                         <li><a class="dropdown-item" href="https://en.wikipedia.org/wiki/A*_search_algorithm"
                                 target="_blank">A-Star</a></li>
                     </ul>
@@ -121,10 +124,11 @@
     <div class="align">
        
         <canvas id="canvas"></canvas>
-        <script src="Grid.js"></script>
+        <script src="grid.js"></script>
         <script src="Node.js"></script>
-        <script src="clock.js"></script>
-        <script src="Bfs.js"></script>
+        <script src="Clock.js"></script>
+        <script src="BFS.js"></script>
+        <script src="DFS.js"></script>
         <script src="Dijkstra.js"></script>
          <script src="Astar.js"></script> 
         <script src="Script.js"></script> 
