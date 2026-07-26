@@ -1,3 +1,6 @@
+// Grid Class - Updated July 2024
+// Manages the 2D grid for pathfinding visualization
+
 class Grid {
   constructor(columns, rows, nodeSize) {
     this.columns = columns;

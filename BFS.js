@@ -1,3 +1,6 @@
+// BFS Algorithm Implementation - Added July 2024
+// Queue-based breadth-first search for pathfinding
+
 function bfs(grid) {
   const visitedNodesInOrder = [];
   const startNode = grid.getStartNode();

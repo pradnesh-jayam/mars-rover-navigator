@@ -1,3 +1,6 @@
+// Mars Rover Path Explorer - Updated July 2024
+// Enhanced with BFS and DFS algorithms
+
 const floor = Math.floor;
 const abs = Math.abs;
 const round = Math.round;

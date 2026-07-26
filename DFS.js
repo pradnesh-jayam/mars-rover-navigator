@@ -1,3 +1,6 @@
+// DFS Algorithm Implementation - Added July 2024
+// Stack-based depth-first search for pathfinding
+
 function dfs(grid) {
   const visitedNodesInOrder = [];
   const startNode = grid.getStartNode();
