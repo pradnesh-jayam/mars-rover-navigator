@@ -1,6 +1,6 @@
-function aStar(board) {
+function aStar(grid) {
   const visitedNodesInOrder = [];
-  board.setStartNodeDistance(0);
+  grid.setStartNodeDistance(0);
   const unvisitedNodes = grid.grid.flat();
   while (unvisitedNodes.length !== 0) {
     sortNodesByDistance(unvisitedNodes);
