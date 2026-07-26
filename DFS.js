@@ -1,4 +1,4 @@
-// DFS Algorithm Implementation - Added July 2024
+// DFS Algorithm Implementation - Added July 2026
 // Stack-based depth-first search for pathfinding
 
 function dfs(grid) {

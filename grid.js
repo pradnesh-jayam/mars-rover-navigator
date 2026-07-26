@@ -1,4 +1,4 @@
-// Grid Class - Updated July 2024
+// Grid Class - Updated July 2026
 // Manages the 2D grid for pathfinding visualization
 
 class Grid {

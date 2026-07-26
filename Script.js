@@ -1,4 +1,4 @@
-// Mars Rover Path Explorer - Updated July 2024
+// Mars Rover Path Explorer - Updated July 2026
 // Enhanced with BFS and DFS algorithms
 
 const floor = Math.floor;

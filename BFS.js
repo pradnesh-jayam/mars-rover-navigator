@@ -1,4 +1,4 @@
-// BFS Algorithm Implementation - Added July 2024
+// BFS Algorithm Implementation - Added July 2026
 // Queue-based breadth-first search for pathfinding
 
 function bfs(grid) {
