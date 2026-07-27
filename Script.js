@@ -1,13 +1,21 @@
-// Mars Rover Path Explorer - Updated July 2026
-// Enhanced with BFS and DFS algorithms
+/**
+ * Mars Rover Path Explorer - Pathfinding Visualizer
+ * Let's you visualize BFS, DFS, Dijkstra's, and A* on a grid
+ * 
+ * You click to draw walls, drag the start/end nodes around,
+ * then pick an algorithm and watch it find the path
+ */
 
+// Math shortcuts
 const floor = Math.floor;
 const abs = Math.abs;
 const round = Math.round;
 
+// Canvas setup
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
+// Grid dimensions - scales based on screen size
 const nodeSize = 30;
 const columns = round((window.innerWidth - window.innerWidth / 10) / nodeSize);
 const rows = round((window.innerHeight - window.innerHeight / 6) / nodeSize);
@@ -15,6 +23,7 @@ const rows = round((window.innerHeight - window.innerHeight / 6) / nodeSize);
 canvas.width = columns * nodeSize;
 canvas.height = rows * nodeSize;
 
+// Track mouse position and drag state
 const mouse = {
   x: undefined,
   y: undefined,
@@ -23,9 +32,13 @@ const mouse = {
   down: false,
 };
 
+// Manhattan distance - used by A* to guess how far a node is from the goal
 function getDistance(nodeA, nodeB) {
   return abs(nodeA.column - nodeB.column) + abs(nodeA.row - nodeB.row);
 }
+
+// Run each algorithm
+// We time it, reset the grid, run the algorithm, then show the results
 
 function drawbfs(grid) {
   var startTime = startClock();
@@ -63,11 +76,13 @@ function drawAStar(grid) {
   drawShortestPath(grid, finishTime);
 }
 
-// Used to sort an array into decreasing distance values
+// Sort nodes by distance (for Dijkstra's)
 function sortNodesByDistance(unvisitedNodes) {
   unvisitedNodes.sort((nodeA, nodeB) => nodeA.distance - nodeB.distance);
 }
 
+// Trace back the path from finish to start using previousNode pointers
+// This reconstructs the shortest path the algorithm found
 function getNodesInShortestPathOrder(finishNode) {
   const nodesInShortestPathOrder = [];
   let currentNode = finishNode;
@@ -78,13 +93,16 @@ function getNodesInShortestPathOrder(finishNode) {
   return nodesInShortestPathOrder;
 }
 
+// Draw the shortest path and update the metrics panel
 function drawShortestPath(grid, finishTime) {
+  // Get the shortest path
   const nodesInShortestPathOrder = getNodesInShortestPathOrder(
     grid.getFinishNode()
   );
+  
+  // Draw it in yellow (skip the start and end nodes)
   for (let i = 1; i < nodesInShortestPathOrder.length - 1; i++) {
     node = nodesInShortestPathOrder[i];
-
     ctx.fillStyle = "#f9d56e";
     ctx.fillRect(
       node.column * nodeSize,
@@ -94,12 +112,14 @@ function drawShortestPath(grid, finishTime) {
     );
   }
 
-  // Displays the distance
+  // Show the distance (number of steps)
   document.getElementById("distance").innerHTML =
     nodesInShortestPathOrder.length - 1;
-  // Displays the time taken
+  
+  // Show how fast it ran
   document.getElementById("time").innerHTML = finishTime;
 
+  // Count how many nodes the algorithm explored
   nodesSearched = 0;
   for (let column = 0; column < grid.columns; column++) {
     for (let row = 0; row < grid.rows; row++) {
@@ -108,8 +128,6 @@ function drawShortestPath(grid, finishTime) {
       }
     }
   }
-
-  // Displays the amount of nodes searched
   document.getElementById("searched").innerHTML = nodesSearched;
 }
 

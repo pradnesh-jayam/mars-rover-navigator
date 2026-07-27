@@ -1,22 +1,21 @@
-// Grid Class - Updated July 2026
-// Manages the 2D grid for pathfinding visualization
+// Grid class - manages the 2D array of nodes
+// Handles creating, drawing, resetting, and updating the grid
 
 class Grid {
   constructor(columns, rows, nodeSize) {
     this.columns = columns;
     this.rows = rows;
     this.nodeSize = nodeSize;
-
     this.grid = [];
   }
 
+  // Create all the nodes in the grid
+  // Positions start and end nodes to be proportional to grid size
   createGrid() {
-    // Creates a 2D array of nodes
     for (let i = 0; i < this.columns; i++) {
       this.grid[i] = [];
     }
 
-    // Creates start and finish node positions to be proportionate to canvas size
     let startColumn = round(columns / 10);
     let startRow = round(rows / 2) - 1;
     let finishColumn = round(columns - columns / 10);
@@ -24,16 +23,9 @@ class Grid {
 
     for (let column = 0; column < this.columns; column++) {
       for (let row = 0; row < this.rows; row++) {
-        if (column == startColumn && row == startRow) {
-          var isStart = true;
-        } else {
-          var isStart = false;
-        }
-        if (column == finishColumn && row == finishRow) {
-          var isFinish = true;
-        } else {
-          var isFinish = false;
-        }
+        var isStart = (column == startColumn && row == startRow);
+        var isFinish = (column == finishColumn && row == finishRow);
+        
         this.grid[column][row] = new Node(
           column,
           row,
@@ -47,6 +39,7 @@ class Grid {
     }
   }
 
+  // Draw all nodes to canvas
   drawGrid() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let column = 0; column < this.columns; column++) {
@@ -56,6 +49,7 @@ class Grid {
     }
   }
 
+  // Handle mouse dragging to move nodes or create walls
   updateGrid() {
     if (mouse.down == true) {
       if (this.grid[changeX][changeY].isStart == true) {
@@ -71,6 +65,7 @@ class Grid {
     }
   }
 
+  // Find the start node (purple)
   getStartNode() {
     for (let i = 0; i < this.grid.length - 1; i++) {
       for (let j = 0; j < this.grid[i].length; j++) {
@@ -82,6 +77,7 @@ class Grid {
     }
   }
 
+  // Find the finish node (orange)
   getFinishNode() {
     for (let i = 0; i < this.grid.length - 1; i++) {
       for (let j = 0; j < this.grid[i].length; j++) {
@@ -93,11 +89,13 @@ class Grid {
     }
   }
 
+  // Set the start node's initial distance
   setStartNodeDistance(distance) {
     this.getStartNode().distance = distance;
   }
 
-  // Clears any previous searches
+  // Clear all visited/distance state so we can run a new algorithm
+  // This keeps the walls and start/end positions but resets the search state
   resetGrid() {
     for (let column = 0; column < this.columns; column++) {
       for (let row = 0; row < this.rows; row++) {
